@@ -13,15 +13,35 @@ public class SwiftFlutterWalletCardPlugin: NSObject, FlutterPlugin {
     super.init()
   }
     
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    guard let controller = UIApplication.shared.delegate?.window??.rootViewController else {
-      fatalError("Unable to get root view controller")
+public static func register(with registrar: FlutterPluginRegistrar) {
+    // Delay the controller retrieval to ensure scene is set up
+    DispatchQueue.main.async {
+        var controller: UIViewController?
+        
+        if #available(iOS 13.0, *) {
+            // For iOS 13+, try to get from scene delegate first
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                controller = window.rootViewController
+            }
+        }
+        
+        // Fallback to traditional approach
+        if controller == nil {
+            controller = UIApplication.shared.delegate?.window??.rootViewController
+        }
+        
+        guard let unwrappedController = controller else {
+            print("FlutterWalletCard: Unable to get root view controller")
+            return
+        }
+        
+        let channel = FlutterMethodChannel(name: "flutter_wallet_card",
+                                           binaryMessenger: registrar.messenger())
+        let instance = SwiftFlutterWalletCardPlugin(controller: unwrappedController)
+        registrar.addMethodCallDelegate(instance, channel: channel)
     }
-    let channel = FlutterMethodChannel(name: "flutter_wallet_card", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterWalletCardPlugin(controller: controller)
-
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+}
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
@@ -77,7 +97,18 @@ public class SwiftFlutterWalletCardPlugin: NSObject, FlutterPlugin {
     }
     
     do {
+      print("FlutterWalletCard: Attempting to create PKPass from file: \(filePath)")
+      print("FlutterWalletCard: File size: \(passData.length) bytes")
+      
+      // Let's read the first few bytes to verify ZIP format
+      let firstBytes = passData.subdata(with: NSRange(location: 0, length: min(20, passData.length)))
+      print("FlutterWalletCard: First 20 bytes: \(firstBytes)")
+      
       let pass = try PKPass(data: passData as Data)
+      
+      print("FlutterWalletCard: Successfully created PKPass")
+      print("FlutterWalletCard: Pass serial number: \(pass.serialNumber ?? "nil")")
+      print("FlutterWalletCard: Pass organization: \(pass.organizationName ?? "nil")")
       
       // Check if pass is already in wallet
       if passLibrary.containsPass(pass) {
@@ -93,12 +124,22 @@ public class SwiftFlutterWalletCardPlugin: NSObject, FlutterPlugin {
       addPassVC.delegate = self
       addPassesFlutterResult = result
       initialPassCount = passLibrary.passes().count
-      
+
       DispatchQueue.main.async {
         self.viewController.present(addPassVC, animated: true)
       }
       
     } catch {
+      print("FlutterWalletCard: PKPass creation failed with error: \(error)")
+      print("FlutterWalletCard: Error type: \(type(of: error))")
+      print("FlutterWalletCard: Error description: \(error.localizedDescription)")
+      
+      if let nsError = error as NSError? {
+        print("FlutterWalletCard: NSError domain: \(nsError.domain)")
+        print("FlutterWalletCard: NSError code: \(nsError.code)")
+        print("FlutterWalletCard: NSError userInfo: \(nsError.userInfo)")
+      }
+      
       result(FlutterError(code: "INVALID_PASS", message: "Invalid pass file: \(error.localizedDescription)", details: nil))
     }
   }

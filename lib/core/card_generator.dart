@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:archive/archive_io.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import '../models/wallet_card.dart';
 import 'wallet_platform.dart';
@@ -26,7 +27,13 @@ abstract class CardGenerator {
 
 /// Apple Wallet pass generator
 class AppleWalletGenerator extends CardGenerator {
-  AppleWalletGenerator({super.fileManager});
+  final Future<File> Function(File manifest, Directory tempDir)?
+      customSigningFunction;
+
+  AppleWalletGenerator({
+    super.fileManager,
+    this.customSigningFunction,
+  });
 
   @override
   String get fileExtension => '.pkpass';
@@ -54,9 +61,19 @@ class AppleWalletGenerator extends CardGenerator {
       // Generate manifest.json
       await _generateManifest(tempDir);
 
-      // Create empty signature file (actual signing should be implemented with certificates)
+      // Create signature file using the file from WalletCard if available
       final signatureFile = File(path.join(tempDir.path, 'signature'));
-      await signatureFile.writeAsString('');
+      if (card.file != null && card.file!.existsSync()) {
+        await card.file!.copy(signatureFile.path);
+      } else if (customSigningFunction != null) {
+        // Use custom signing function if provided
+        final manifest = File(path.join(tempDir.path, 'manifest.json'));
+        final customSignature = await customSigningFunction!(manifest, tempDir);
+        await customSignature.copy(signatureFile.path);
+      } else {
+        // Create empty signature file as fallback
+        await signatureFile.writeAsString('');
+      }
 
       // Create .pkpass file
       final outputFile =
@@ -92,9 +109,19 @@ class AppleWalletGenerator extends CardGenerator {
       // Generate manifest.json
       await _generateManifest(tempDir);
 
-      // Create empty signature file (actual signing should be implemented with certificates)
+      // Create signature file using the file from WalletCard if available
       final signatureFile = File(path.join(tempDir.path, 'signature'));
-      await signatureFile.writeAsString('');
+      if (card.file != null && card.file!.existsSync()) {
+        await card.file!.copy(signatureFile.path);
+      } else if (customSigningFunction != null) {
+        // Use custom signing function if provided
+        final manifest = File(path.join(tempDir.path, 'manifest.json'));
+        final customSignature = await customSigningFunction!(manifest, tempDir);
+        await customSignature.copy(signatureFile.path);
+      } else {
+        // Create empty signature file as fallback
+        await signatureFile.writeAsString('');
+      }
 
       // Create .pkpass file
       await _createPkpassArchive(tempDir, outputFile);
@@ -236,18 +263,14 @@ class AppleWalletGenerator extends CardGenerator {
     return structure;
   }
 
-  String _colorToRgbString(dynamic color) {
-    if (color is String) return color;
-    // Assuming color is a Flutter Color object
-    if (color.runtimeType.toString().contains('Color')) {
-      // Extract RGB values from Color object
-      final colorValue = color.value as int;
-      final r = (colorValue >> 16) & 0xFF;
-      final g = (colorValue >> 8) & 0xFF;
-      final b = colorValue & 0xFF;
-      return 'rgb($r,$g,$b)';
-    }
-    return color.toString();
+  String _colorToRgbString(Color color) {
+    // Extract RGB values from Flutter Color object using the non-deprecated approach
+    final r = (color.r * 255.0).round() & 0xff;
+    final g = (color.g * 255.0).round() & 0xff;
+    final b = (color.b * 255.0).round() & 0xff;
+    final rgbString = 'rgb($r,$g,$b)';
+
+    return rgbString;
   }
 
   Future<void> _copyImages(WalletCard card, Directory tempDir) async {
