@@ -27,6 +27,9 @@ class WalletCard extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final File? file;
 
+  final File? manifest;
+  final File? signature;
+
   const WalletCard({
     required this.id,
     required this.type,
@@ -34,11 +37,27 @@ class WalletCard extends Equatable {
     required this.metadata,
     this.visuals,
     this.file,
+    this.manifest,
+    this.signature,
   });
 
   factory WalletCard.fromJson(Map<String, dynamic> json) =>
       _$WalletCardFromJson(json);
   Map<String, dynamic> toJson() => _$WalletCardToJson(this);
+
+  @override
+  String toString() {
+    return 'WalletCard{\n'
+        '  id: $id,\n'
+        '  type: ${type.name},\n'
+        '  metadata: $metadata,\n'
+        '  visuals: $visuals,\n'
+        '  platformData: $platformData,\n'
+        '  file: ${file?.path ?? 'null'},\n'
+        '  manifest: ${manifest?.path ?? 'null'},\n'
+        '  signature: ${signature?.path ?? 'null'}\n'
+        '}';
+  }
 
   @override
   List<Object?> get props =>
