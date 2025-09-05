@@ -27,9 +27,6 @@ class WalletCard extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final File? file;
 
-  final File? manifest;
-  final File? signature;
-
   const WalletCard({
     required this.id,
     required this.type,
@@ -37,8 +34,6 @@ class WalletCard extends Equatable {
     required this.metadata,
     this.visuals,
     this.file,
-    this.manifest,
-    this.signature,
   });
 
   factory WalletCard.fromJson(Map<String, dynamic> json) =>
@@ -54,8 +49,6 @@ class WalletCard extends Equatable {
         '  visuals: $visuals,\n'
         '  platformData: $platformData,\n'
         '  file: ${file?.path ?? 'null'},\n'
-        '  manifest: ${manifest?.path ?? 'null'},\n'
-        '  signature: ${signature?.path ?? 'null'}\n'
         '}';
   }
 
@@ -87,24 +80,34 @@ enum WalletCardType {
 class WalletCardMetadata extends Equatable {
   final String title;
   final String? subtitle;
+  final Map<String, String>? primaryFields;
+  final Map<String, String>? secondaryFields;
+  final Map<String, String>? additionalInfoFields;
+  final Map<String, String>? auxiliaryFields;
+  final Map<String, String>? backFields;
+  final Map<String, String>? headerFields;
   final String? description;
   final String organizationName;
   final String serialNumber;
   final DateTime? expirationDate;
   final DateTime? relevantDate;
   final List<WalletCardLocation>? locations;
-  final Map<String, String>? customFields;
 
   const WalletCardMetadata({
     required this.title,
     this.subtitle,
+    this.primaryFields,
+    this.secondaryFields,
+    this.additionalInfoFields,
+    this.auxiliaryFields,
+    this.backFields,
+    this.headerFields,
     this.description,
     required this.organizationName,
     required this.serialNumber,
     this.expirationDate,
     this.relevantDate,
     this.locations,
-    this.customFields,
   });
 
   factory WalletCardMetadata.fromJson(Map<String, dynamic> json) =>
@@ -115,13 +118,18 @@ class WalletCardMetadata extends Equatable {
   List<Object?> get props => [
         title,
         subtitle,
+        primaryFields,
+        secondaryFields,
+        additionalInfoFields,
+        auxiliaryFields,
+        backFields,
+        headerFields,
         description,
         organizationName,
         serialNumber,
         expirationDate,
         relevantDate,
         locations,
-        customFields
       ];
 }
 

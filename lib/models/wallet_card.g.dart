@@ -40,6 +40,25 @@ WalletCardMetadata _$WalletCardMetadataFromJson(Map<String, dynamic> json) =>
     WalletCardMetadata(
       title: json['title'] as String,
       subtitle: json['subtitle'] as String?,
+      primaryFields: (json['primaryFields'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      secondaryFields: (json['secondaryFields'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      additionalInfoFields:
+          (json['additionalInfoFields'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      auxiliaryFields: (json['auxiliaryFields'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      backFields: (json['backFields'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      headerFields: (json['headerFields'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
       description: json['description'] as String?,
       organizationName: json['organizationName'] as String,
       serialNumber: json['serialNumber'] as String,
@@ -52,22 +71,24 @@ WalletCardMetadata _$WalletCardMetadataFromJson(Map<String, dynamic> json) =>
       locations: (json['locations'] as List<dynamic>?)
           ?.map((e) => WalletCardLocation.fromJson(e as Map<String, dynamic>))
           .toList(),
-      customFields: (json['customFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
     );
 
 Map<String, dynamic> _$WalletCardMetadataToJson(WalletCardMetadata instance) =>
     <String, dynamic>{
       'title': instance.title,
       'subtitle': instance.subtitle,
+      'primaryFields': instance.primaryFields,
+      'secondaryFields': instance.secondaryFields,
+      'additionalInfoFields': instance.additionalInfoFields,
+      'auxiliaryFields': instance.auxiliaryFields,
+      'backFields': instance.backFields,
+      'headerFields': instance.headerFields,
       'description': instance.description,
       'organizationName': instance.organizationName,
       'serialNumber': instance.serialNumber,
       'expirationDate': instance.expirationDate?.toIso8601String(),
       'relevantDate': instance.relevantDate?.toIso8601String(),
       'locations': instance.locations,
-      'customFields': instance.customFields,
     };
 
 WalletCardVisuals _$WalletCardVisualsFromJson(Map<String, dynamic> json) =>

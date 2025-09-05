@@ -223,31 +223,26 @@ class AppleWalletGenerator extends CardGenerator {
 
   Map<String, dynamic> _generateCardStructure(WalletCard card) {
     final structure = <String, dynamic>{};
-
-    // Add primary fields
-    if (card.metadata.title.isNotEmpty) {
-      structure['primaryFields'] = [
-        {
-          'key': 'title',
-          'label': 'Title',
-          'value': card.metadata.title,
-        }
-      ];
-    }
-
-    // Add secondary fields
+    final primaryFields = <Map<String, dynamic>>[];
     final secondaryFields = <Map<String, dynamic>>[];
-    if (card.metadata.subtitle != null) {
-      secondaryFields.add({
-        'key': 'subtitle',
-        'label': 'Subtitle',
-        'value': card.metadata.subtitle,
+    final additionalInfoFields = <Map<String, dynamic>>[];
+    final auxiliaryFields = <Map<String, dynamic>>[];
+    final backFields = <Map<String, dynamic>>[];
+    final headerFields = <Map<String, dynamic>>[];
+
+    if (card.metadata.primaryFields != null) {
+      card.metadata.primaryFields!.forEach((key, value) {
+        primaryFields.add({
+          'key': key,
+          'label': key.replaceAll('_', ' ').toUpperCase(),
+          'value': value,
+        });
       });
     }
 
     // Add custom fields
-    if (card.metadata.customFields != null) {
-      card.metadata.customFields!.forEach((key, value) {
+    if (card.metadata.secondaryFields != null) {
+      card.metadata.secondaryFields!.forEach((key, value) {
         secondaryFields.add({
           'key': key,
           'label': key.replaceAll('_', ' ').toUpperCase(),
@@ -256,9 +251,70 @@ class AppleWalletGenerator extends CardGenerator {
       });
     }
 
+    if (card.metadata.additionalInfoFields != null) {
+      card.metadata.additionalInfoFields!.forEach((key, value) {
+        additionalInfoFields.add({
+          'key': key,
+          'label': key.replaceAll('_', ' ').toUpperCase(),
+          'value': value,
+        });
+      });
+    }
+
+    if (card.metadata.auxiliaryFields != null) {
+      card.metadata.auxiliaryFields!.forEach((key, value) {
+        auxiliaryFields.add({
+          'key': key,
+          'label': key.replaceAll('_', ' ').toUpperCase(),
+          'value': value,
+        });
+      });
+    }
+
+    if (card.metadata.backFields != null) {
+      card.metadata.backFields!.forEach((key, value) {
+        backFields.add({
+          'key': key,
+          'label': key.replaceAll('_', ' ').toUpperCase(),
+          'value': value,
+        });
+      });
+    }
+
+    if (card.metadata.headerFields != null) {
+      card.metadata.headerFields!.forEach((key, value) {
+        headerFields.add({
+          'key': key,
+          'label': key.replaceAll('_', ' ').toUpperCase(),
+          'value': value,
+        });
+      });
+    }
+
+    // It seems like we can only have one Primary Field
+    if (primaryFields.isNotEmpty) {
+      structure['primaryFields'] = primaryFields;
+    }
+
+    // Appears below Primary Field
     if (secondaryFields.isNotEmpty) {
       structure['secondaryFields'] = secondaryFields;
     }
+
+    // Shows below the card
+    structure['additionalInfoFields'] = additionalInfoFields;
+
+    // Appears below Secondary Fields
+    // add row (0, 1), up to two rows
+    // Each row can have up to 4 fields
+    structure['auxiliaryFields'] = auxiliaryFields;
+
+    // Shows on the back of the card on WatchOS
+    structure['backFields'] = backFields;
+
+    // Appears at top right of card
+    // Space is limited. approx 1-2 header fields
+    structure['headerFields'] = headerFields;
 
     return structure;
   }
