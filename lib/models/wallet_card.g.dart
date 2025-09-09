@@ -40,25 +40,24 @@ WalletCardMetadata _$WalletCardMetadataFromJson(Map<String, dynamic> json) =>
     WalletCardMetadata(
       title: json['title'] as String,
       subtitle: json['subtitle'] as String?,
-      primaryFields: (json['primaryFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
-      secondaryFields: (json['secondaryFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
-      additionalInfoFields:
-          (json['additionalInfoFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
-      auxiliaryFields: (json['auxiliaryFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
-      backFields: (json['backFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
-      headerFields: (json['headerFields'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
+      primaryFields: (json['primaryFields'] as List<dynamic>?)
+          ?.map((e) => PrimaryField.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      secondaryFields: (json['secondaryFields'] as List<dynamic>?)
+          ?.map((e) => SecondaryField.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      additionalInfoFields: (json['additionalInfoFields'] as List<dynamic>?)
+          ?.map((e) => AdditionalField.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      auxiliaryFields: (json['auxiliaryFields'] as List<dynamic>?)
+          ?.map((e) => AuxiliaryField.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      backFields: (json['backFields'] as List<dynamic>?)
+          ?.map((e) => BackField.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      headerFields: (json['headerFields'] as List<dynamic>?)
+          ?.map((e) => HeaderField.fromJson(e as Map<String, dynamic>))
+          .toList(),
       description: json['description'] as String?,
       organizationName: json['organizationName'] as String,
       serialNumber: json['serialNumber'] as String,
@@ -130,4 +129,86 @@ Map<String, dynamic> _$WalletCardLocationToJson(WalletCardLocation instance) =>
       'longitude': instance.longitude,
       'altitude': instance.altitude,
       'relevantText': instance.relevantText,
+    };
+
+PrimaryField _$PrimaryFieldFromJson(Map<String, dynamic> json) => PrimaryField(
+      key: json['key'] as String,
+      value: json['value'] as String,
+      label: json['label'] as String,
+    );
+
+Map<String, dynamic> _$PrimaryFieldToJson(PrimaryField instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'label': instance.label,
+    };
+
+SecondaryField _$SecondaryFieldFromJson(Map<String, dynamic> json) =>
+    SecondaryField(
+      key: json['key'] as String,
+      value: json['value'] as String,
+      label: json['label'] as String,
+    );
+
+Map<String, dynamic> _$SecondaryFieldToJson(SecondaryField instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'label': instance.label,
+    };
+
+AdditionalField _$AdditionalFieldFromJson(Map<String, dynamic> json) =>
+    AdditionalField(
+      key: json['key'] as String,
+      value: json['value'] as String,
+      label: json['label'] as String,
+    );
+
+Map<String, dynamic> _$AdditionalFieldToJson(AdditionalField instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'label': instance.label,
+    };
+
+AuxiliaryField _$AuxiliaryFieldFromJson(Map<String, dynamic> json) =>
+    AuxiliaryField(
+      key: json['key'] as String,
+      value: json['value'] as String,
+      label: json['label'] as String,
+      row: (json['row'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$AuxiliaryFieldToJson(AuxiliaryField instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'label': instance.label,
+      'row': instance.row,
+    };
+
+BackField _$BackFieldFromJson(Map<String, dynamic> json) => BackField(
+      key: json['key'] as String,
+      value: json['value'] as String,
+      label: json['label'] as String,
+    );
+
+Map<String, dynamic> _$BackFieldToJson(BackField instance) => <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'label': instance.label,
+    };
+
+HeaderField _$HeaderFieldFromJson(Map<String, dynamic> json) => HeaderField(
+      key: json['key'] as String,
+      value: json['value'] as String,
+      label: json['label'] as String,
+    );
+
+Map<String, dynamic> _$HeaderFieldToJson(HeaderField instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+      'label': instance.label,
     };

@@ -80,12 +80,12 @@ enum WalletCardType {
 class WalletCardMetadata extends Equatable {
   final String title;
   final String? subtitle;
-  final Map<String, String>? primaryFields;
-  final Map<String, String>? secondaryFields;
-  final Map<String, String>? additionalInfoFields;
-  final Map<String, String>? auxiliaryFields;
-  final Map<String, String>? backFields;
-  final Map<String, String>? headerFields;
+  final List<PrimaryField>? primaryFields;
+  final List<SecondaryField>? secondaryFields;
+  final List<AdditionalField>? additionalInfoFields;
+  final List<AuxiliaryField>? auxiliaryFields;
+  final List<BackField>? backFields;
+  final List<HeaderField>? headerFields;
   final String? description;
   final String organizationName;
   final String serialNumber;
@@ -206,4 +206,126 @@ class WalletCardLocation extends Equatable {
 
   @override
   List<Object?> get props => [latitude, longitude, altitude, relevantText];
+}
+
+@JsonSerializable()
+class PrimaryField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const PrimaryField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory PrimaryField.fromJson(Map<String, dynamic> json) =>
+      _$PrimaryFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$PrimaryFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class SecondaryField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const SecondaryField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory SecondaryField.fromJson(Map<String, dynamic> json) =>
+      _$SecondaryFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$SecondaryFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class AdditionalField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const AdditionalField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory AdditionalField.fromJson(Map<String, dynamic> json) =>
+      _$AdditionalFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$AdditionalFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class AuxiliaryField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+  final int? row;
+
+  const AuxiliaryField({
+    required this.key,
+    required this.label,
+    required this.value,
+    this.row,
+  });
+
+  factory AuxiliaryField.fromJson(Map<String, dynamic> json) =>
+      _$AuxiliaryFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$AuxiliaryFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class BackField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const BackField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory BackField.fromJson(Map<String, dynamic> json) =>
+      _$BackFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$BackFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class HeaderField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const HeaderField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory HeaderField.fromJson(Map<String, dynamic> json) =>
+      _$HeaderFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$HeaderFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
 }

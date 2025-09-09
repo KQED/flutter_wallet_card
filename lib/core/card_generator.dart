@@ -231,64 +231,64 @@ class AppleWalletGenerator extends CardGenerator {
     final headerFields = <Map<String, dynamic>>[];
 
     if (card.metadata.primaryFields != null) {
-      card.metadata.primaryFields!.forEach((key, value) {
+      for (var data in card.metadata.primaryFields!) {
         primaryFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
     // Add custom fields
     if (card.metadata.secondaryFields != null) {
-      card.metadata.secondaryFields!.forEach((key, value) {
+      for (var data in card.metadata.secondaryFields!) {
         secondaryFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
     if (card.metadata.additionalInfoFields != null) {
-      card.metadata.additionalInfoFields!.forEach((key, value) {
+      for (var data in card.metadata.additionalInfoFields!) {
         additionalInfoFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
     if (card.metadata.auxiliaryFields != null) {
-      card.metadata.auxiliaryFields!.forEach((key, value) {
+      for (var data in card.metadata.auxiliaryFields!) {
         auxiliaryFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
     if (card.metadata.backFields != null) {
-      card.metadata.backFields!.forEach((key, value) {
+      for (var data in card.metadata.backFields!) {
         backFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
     if (card.metadata.headerFields != null) {
-      card.metadata.headerFields!.forEach((key, value) {
+      for (var data in card.metadata.headerFields!) {
         headerFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
     // It seems like we can only have one Primary Field

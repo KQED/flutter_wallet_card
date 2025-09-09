@@ -320,12 +320,12 @@ extension WalletCardMetadataCopyWith on WalletCardMetadata {
     DateTime? expirationDate,
     DateTime? relevantDate,
     List<WalletCardLocation>? locations,
-    Map<String, String>? primaryFields,
-    Map<String, String>? secondaryFields,
-    Map<String, String>? additionalInfoFields,
-    Map<String, String>? auxiliaryFields,
-    Map<String, String>? backFields,
-    Map<String, String>? headerFields,
+    List<PrimaryField>? primaryFields,
+    List<SecondaryField>? secondaryFields,
+    List<AdditionalField>? additionalInfoFields,
+    List<AuxiliaryField>? auxiliaryFields,
+    List<BackField>? backFields,
+    List<HeaderField>? headerFields,
   }) {
     return WalletCardMetadata(
       title: title ?? this.title,
