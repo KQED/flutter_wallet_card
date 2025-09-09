@@ -223,42 +223,98 @@ class AppleWalletGenerator extends CardGenerator {
 
   Map<String, dynamic> _generateCardStructure(WalletCard card) {
     final structure = <String, dynamic>{};
-
-    // Add primary fields
-    if (card.metadata.title.isNotEmpty) {
-      structure['primaryFields'] = [
-        {
-          'key': 'title',
-          'label': 'Title',
-          'value': card.metadata.title,
-        }
-      ];
-    }
-
-    // Add secondary fields
+    final primaryFields = <Map<String, dynamic>>[];
     final secondaryFields = <Map<String, dynamic>>[];
-    if (card.metadata.subtitle != null) {
-      secondaryFields.add({
-        'key': 'subtitle',
-        'label': 'Subtitle',
-        'value': card.metadata.subtitle,
-      });
+    final additionalInfoFields = <Map<String, dynamic>>[];
+    final auxiliaryFields = <Map<String, dynamic>>[];
+    final backFields = <Map<String, dynamic>>[];
+    final headerFields = <Map<String, dynamic>>[];
+
+    if (card.metadata.primaryFields != null) {
+      for (var data in card.metadata.primaryFields!) {
+        primaryFields.add({
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
+        });
+      }
     }
 
     // Add custom fields
-    if (card.metadata.customFields != null) {
-      card.metadata.customFields!.forEach((key, value) {
+    if (card.metadata.secondaryFields != null) {
+      for (var data in card.metadata.secondaryFields!) {
         secondaryFields.add({
-          'key': key,
-          'label': key.replaceAll('_', ' ').toUpperCase(),
-          'value': value,
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
         });
-      });
+      }
     }
 
+    if (card.metadata.additionalInfoFields != null) {
+      for (var data in card.metadata.additionalInfoFields!) {
+        additionalInfoFields.add({
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
+        });
+      }
+    }
+
+    if (card.metadata.auxiliaryFields != null) {
+      for (var data in card.metadata.auxiliaryFields!) {
+        auxiliaryFields.add({
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
+        });
+      }
+    }
+
+    if (card.metadata.backFields != null) {
+      for (var data in card.metadata.backFields!) {
+        backFields.add({
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
+        });
+      }
+    }
+
+    if (card.metadata.headerFields != null) {
+      for (var data in card.metadata.headerFields!) {
+        headerFields.add({
+          'key': data.key,
+          'label': data.label,
+          'value': data.value,
+        });
+      }
+    }
+
+    // It seems like we can only have one Primary Field
+    if (primaryFields.isNotEmpty) {
+      structure['primaryFields'] = primaryFields;
+    }
+
+    // Appears below Primary Field
     if (secondaryFields.isNotEmpty) {
       structure['secondaryFields'] = secondaryFields;
     }
+
+    // Shows below the card
+    structure['additionalInfoFields'] = additionalInfoFields;
+
+    // Appears below Secondary Fields
+    // add row (0, 1), up to two rows
+    // Each row can have up to 4 fields
+    structure['auxiliaryFields'] = auxiliaryFields;
+
+    // Shows on the back of the card on WatchOS
+    structure['backFields'] = backFields;
+
+    // Appears at top right of card
+    // Space is limited. approx 1-2 header fields
+    structure['headerFields'] = headerFields;
 
     return structure;
   }

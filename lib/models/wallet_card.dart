@@ -27,9 +27,6 @@ class WalletCard extends Equatable {
   @JsonKey(includeFromJson: false, includeToJson: false)
   final File? file;
 
-  final File? manifest;
-  final File? signature;
-
   const WalletCard({
     required this.id,
     required this.type,
@@ -37,8 +34,6 @@ class WalletCard extends Equatable {
     required this.metadata,
     this.visuals,
     this.file,
-    this.manifest,
-    this.signature,
   });
 
   factory WalletCard.fromJson(Map<String, dynamic> json) =>
@@ -54,8 +49,6 @@ class WalletCard extends Equatable {
         '  visuals: $visuals,\n'
         '  platformData: $platformData,\n'
         '  file: ${file?.path ?? 'null'},\n'
-        '  manifest: ${manifest?.path ?? 'null'},\n'
-        '  signature: ${signature?.path ?? 'null'}\n'
         '}';
   }
 
@@ -85,26 +78,39 @@ enum WalletCardType {
 /// Card metadata
 @JsonSerializable()
 class WalletCardMetadata extends Equatable {
+  /// title and subtitle are no longer used for iOS
   final String title;
+
+  /// title and subtitle are no longer used for iOS
   final String? subtitle;
+  final List<PrimaryField>? primaryFields;
+  final List<SecondaryField>? secondaryFields;
+  final List<AdditionalField>? additionalInfoFields;
+  final List<AuxiliaryField>? auxiliaryFields;
+  final List<BackField>? backFields;
+  final List<HeaderField>? headerFields;
   final String? description;
   final String organizationName;
   final String serialNumber;
   final DateTime? expirationDate;
   final DateTime? relevantDate;
   final List<WalletCardLocation>? locations;
-  final Map<String, String>? customFields;
 
   const WalletCardMetadata({
     required this.title,
     this.subtitle,
+    this.primaryFields,
+    this.secondaryFields,
+    this.additionalInfoFields,
+    this.auxiliaryFields,
+    this.backFields,
+    this.headerFields,
     this.description,
     required this.organizationName,
     required this.serialNumber,
     this.expirationDate,
     this.relevantDate,
     this.locations,
-    this.customFields,
   });
 
   factory WalletCardMetadata.fromJson(Map<String, dynamic> json) =>
@@ -115,13 +121,18 @@ class WalletCardMetadata extends Equatable {
   List<Object?> get props => [
         title,
         subtitle,
+        primaryFields,
+        secondaryFields,
+        additionalInfoFields,
+        auxiliaryFields,
+        backFields,
+        headerFields,
         description,
         organizationName,
         serialNumber,
         expirationDate,
         relevantDate,
         locations,
-        customFields
       ];
 }
 
@@ -198,4 +209,126 @@ class WalletCardLocation extends Equatable {
 
   @override
   List<Object?> get props => [latitude, longitude, altitude, relevantText];
+}
+
+@JsonSerializable()
+class PrimaryField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const PrimaryField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory PrimaryField.fromJson(Map<String, dynamic> json) =>
+      _$PrimaryFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$PrimaryFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class SecondaryField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const SecondaryField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory SecondaryField.fromJson(Map<String, dynamic> json) =>
+      _$SecondaryFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$SecondaryFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class AdditionalField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const AdditionalField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory AdditionalField.fromJson(Map<String, dynamic> json) =>
+      _$AdditionalFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$AdditionalFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class AuxiliaryField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+  final int? row;
+
+  const AuxiliaryField({
+    required this.key,
+    required this.label,
+    required this.value,
+    this.row,
+  });
+
+  factory AuxiliaryField.fromJson(Map<String, dynamic> json) =>
+      _$AuxiliaryFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$AuxiliaryFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class BackField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const BackField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory BackField.fromJson(Map<String, dynamic> json) =>
+      _$BackFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$BackFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
+}
+
+@JsonSerializable()
+class HeaderField extends Equatable {
+  final String key;
+  final String label;
+  final String value;
+
+  const HeaderField({
+    required this.key,
+    required this.label,
+    required this.value,
+  });
+
+  factory HeaderField.fromJson(Map<String, dynamic> json) =>
+      _$HeaderFieldFromJson(json);
+  Map<String, dynamic> toJson() => _$HeaderFieldToJson(this);
+
+  @override
+  List<Object?> get props => [key, label, value];
 }
