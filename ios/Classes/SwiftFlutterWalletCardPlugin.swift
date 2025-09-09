@@ -110,11 +110,6 @@ public static func register(with registrar: FlutterPluginRegistrar) {
       print("FlutterWalletCard: Pass serial number: \(pass.serialNumber ?? "nil")")
       print("FlutterWalletCard: Pass organization: \(pass.organizationName ?? "nil")")
       
-      // Check if pass is already in wallet
-      if passLibrary.containsPass(pass) {
-        result(FlutterError(code: "PASS_ALREADY_EXISTS", message: "Pass is already in wallet", details: nil))
-        return
-      }
       
       guard let addPassVC = PKAddPassesViewController(pass: pass) else {
         result(FlutterError(code: "CANNOT_ADD_PASS", message: "Cannot add this pass to wallet", details: nil))
