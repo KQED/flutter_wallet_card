@@ -78,7 +78,10 @@ enum WalletCardType {
 /// Card metadata
 @JsonSerializable()
 class WalletCardMetadata extends Equatable {
+  /// title and subtitle are no longer used for iOS
   final String title;
+
+  /// title and subtitle are no longer used for iOS
   final String? subtitle;
   final List<PrimaryField>? primaryFields;
   final List<SecondaryField>? secondaryFields;
