@@ -7,7 +7,7 @@ issue_tracker: https://github.com/WebEferen/flutter_wallet_card/issues
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   archive: ^3.4.10
@@ -37,4 +37,4 @@ flutter:
         package: com.flutter.wallet_card
         pluginClass: FlutterWalletCardPlugin
       ios:
-        pluginClass: FlutterWalletCardPlugin
+        pluginClass: SwiftFlutterWalletCardPlugin
