@@ -1,4 +1,4 @@
-package com.suncern.example
+package com.flutter_wallet_card.example
 
 import io.flutter.embedding.android.FlutterActivity
 
